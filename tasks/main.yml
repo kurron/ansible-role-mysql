@@ -1,0 +1,26 @@
+---
+- name: Install Rsync Configuration File
+  become: yes
+  template:
+      src: templates/rsyncd.conf.j2
+      dest: "/etc/rsyncd.conf"
+      mode: 0444
+  when: rsync_install
+
+- name: Install Required Packages
+  become: yes
+  package:
+      name: "{{item}}"
+      state: present
+  with_items:
+  - "rsync"
+  when: rsync_install
+
+- name: Start Rsync
+  become: yes
+  systemd:
+      name: rsync
+      enabled: yes
+      daemon_reload: yes
+      state: restarted
+  when: rsync_install
