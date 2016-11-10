@@ -1,2 +1,2 @@
 ---
-rsync_install: true
+mysql_install: true

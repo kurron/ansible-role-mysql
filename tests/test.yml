@@ -1,4 +1,4 @@
 ---
 - hosts: remote
   roles:
-  - role: ../../ansible-role-rsync
+  - role: ../../ansible-role-mysql

@@ -1,6 +1,6 @@
 galaxy_info:
   author: Ronald D. Kurr
-  description: Rsync server.
+  description: MySQL server.
   company: jvmguy.com
 
   license: Apache 2
@@ -10,6 +10,9 @@ galaxy_info:
   github_branch: master
 
   platforms:
+  - name: RHEL
+    versions:
+    - maipo
   - name: Fedora
     versions:
     - 24
@@ -31,7 +34,7 @@ galaxy_info:
     - xenial
 
   galaxy_tags:
-      - rsync
+      - mysql
 
 dependencies:
     - { role: kurron.base }

@@ -1,7 +1,7 @@
 Role Name
 =========
 
-An Rsync server that can be used to pull backups from.
+MySQL server, initially targetted to RHEL.
 
 Requirements
 ------------
@@ -24,10 +24,8 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-      - { role: kurron.rsync }
+      - { role: kurron.mysql }
 ```
-
-Can test via `rsync -rdt rsync://192.168.1.233:873/`.
 
 License
 -------
