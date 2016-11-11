@@ -34,11 +34,11 @@
       state: present
   when: mysql_install and (ansible_distribution == "RedHat")
 
-- name: Start Rsync
+- name: Start MySQL
   become: yes
   systemd:
-      name: rsync
+      name: mysqld
       enabled: yes
       daemon_reload: yes
       state: restarted
-  when: ansible_distribution == "FALSE"
+  when: mysql_install
