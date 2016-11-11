@@ -20,24 +20,26 @@
       state: present
   when: mysql_install and (ansible_distribution == "RedHat")
 
-- name: Install MySQL
+- name: Install MySQL And Companion Tools
   become: yes
   yum:
-      name: "mysql-community-server"
+      name: "{{ item }}"
       state: present
+  with_items:
+      - mysql-community-server
+      - mysql-community-client
+      - MySQL-python
   when: mysql_install and (ansible_distribution == "RedHat")
 
 - name: Adjust MySQL Configuration File
   become: yes
   lineinfile:
       dest: /etc/my.cnf
-      line: "character-set-server=utf8"
-  lineinfile:
-      dest: /etc/my.cnf
-      line: "bind-address=*"
-  lineinfile:
-      dest: /etc/my.cnf
-      line: "lower_case_table_names = 1"
+      line: "{{ item }}"
+  with_items:
+      - "character-set-server=utf8"
+      - "bind-address=*"
+      - "lower_case_table_names=1"
   when: mysql_install and (ansible_distribution == "RedHat")
 
 - name: Start MySQL
