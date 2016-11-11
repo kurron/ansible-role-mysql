@@ -5,16 +5,34 @@
       src: templates/rsyncd.conf.j2
       dest: "/etc/rsyncd.conf"
       mode: 0444
-  when: rsync_install
+  when: ansible_distribution == "FALSE"
 
-- name: Install Required Packages
+# this fails with 104 errors for some reason.  can't follow redirects?
+- name: Download MySQL Repository Configuration
+  become: no
+  get_url:
+      url: "http://repo.mysql.com//mysql57-community-release-el7-9.noarch.rpm"
+      dest: "{{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm"
+  when: mysql_install and (ansible_distribution == "FALSE")
+
+- name: Download MySQL Repository Configuration
+  become: no
+  command: "curl --output {{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm http://repo.mysql.com//mysql57-community-release-el7-9.noarch.rpm"
+  when: mysql_install and (ansible_distribution == "RedHat")
+
+- name: Install MySQL Repository
   become: yes
-  package:
-      name: "{{item}}"
+  yum:
+      name: "{{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm"
       state: present
-  with_items:
-  - "rsync"
-  when: rsync_install
+  when: mysql_install and (ansible_distribution == "RedHat")
+
+- name: Install MySQL
+  become: yes
+  yum:
+      name: "mysql-community-server"
+      state: present
+  when: mysql_install and (ansible_distribution == "RedHat")
 
 - name: Start Rsync
   become: yes
@@ -23,4 +41,4 @@
       enabled: yes
       daemon_reload: yes
       state: restarted
-  when: rsync_install
+  when: ansible_distribution == "FALSE"
