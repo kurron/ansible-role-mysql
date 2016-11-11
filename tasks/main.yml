@@ -42,6 +42,28 @@
       - "lower_case_table_names=1"
   when: mysql_install and (ansible_distribution == "RedHat")
 
+- name: Copy Password Capture Script
+  become: yes
+  copy:
+      src: files/extract-password.sh
+      dest: /tmp/extract-password.sh
+      mode: 0555
+  when: mysql_install and (ansible_distribution == "RedHat")
+
+- name: Copy Password Alter Script
+  become: yes
+  copy:
+      src: files/change-password.sh
+      dest: /tmp/change-password.sh
+      mode: 0555
+  when: mysql_install and (ansible_distribution == "RedHat")
+
+- name: Capture MySQL Root Password
+  become: yes
+  shell: /tmp/extract-password.sh
+  register: password
+  when: mysql_install and (ansible_distribution == "RedHat")
+
 - name: Start MySQL
   become: yes
   systemd:
@@ -49,4 +71,11 @@
       enabled: yes
       daemon_reload: yes
       state: restarted
+  when: mysql_install
+
+# Note: We do not use mysql_user for this operation, as it doesn't always update
+# the root password correctly. See: https://goo.gl/MSOejW
+# Set root password for MySQL >= 5.7.x.
+- name: Update MySQL root password for localhost root account (5.7.x).
+  command: "/tmp/change-password.sh {{ password }} !!MySQL11"
   when: mysql_install
