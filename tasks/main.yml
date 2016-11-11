@@ -1,12 +1,4 @@
 ---
-- name: Install Rsync Configuration File
-  become: yes
-  template:
-      src: templates/rsyncd.conf.j2
-      dest: "/etc/rsyncd.conf"
-      mode: 0444
-  when: ansible_distribution == "FALSE"
-
 # this fails with 104 errors for some reason.  can't follow redirects?
 - name: Download MySQL Repository Configuration
   become: no
@@ -15,6 +7,7 @@
       dest: "{{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm"
   when: mysql_install and (ansible_distribution == "FALSE")
 
+# download by hand because of the issue with get_url
 - name: Download MySQL Repository Configuration
   become: no
   command: "curl --output {{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm http://repo.mysql.com//mysql57-community-release-el7-9.noarch.rpm"
@@ -32,6 +25,19 @@
   yum:
       name: "mysql-community-server"
       state: present
+  when: mysql_install and (ansible_distribution == "RedHat")
+
+- name: Adjust MySQL Configuration File
+  become: yes
+  lineinfile:
+      dest: /etc/my.cnf
+      line: "character-set-server=utf8"
+  lineinfile:
+      dest: /etc/my.cnf
+      line: "bind-address=*"
+  lineinfile:
+      dest: /etc/my.cnf
+      line: "lower_case_table_names = 1"
   when: mysql_install and (ansible_distribution == "RedHat")
 
 - name: Start MySQL
