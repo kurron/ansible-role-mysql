@@ -64,6 +64,9 @@
   register: password
   when: mysql_install and (ansible_distribution == "RedHat")
 
+- debug:
+      msg: "Password = {{ password.stdout }}"
+
 - name: Start MySQL
   become: yes
   systemd:
@@ -77,5 +80,5 @@
 # the root password correctly. See: https://goo.gl/MSOejW
 # Set root password for MySQL >= 5.7.x.
 - name: Update MySQL root password for localhost root account (5.7.x).
-  command: "/tmp/change-password.sh {{ password }} !!MySQL11"
+  command: "/tmp/change-password.sh {{ password.stdout }}"
   when: mysql_install
