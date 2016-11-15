@@ -7,7 +7,7 @@ OLD_PASSWORD="$1"
 echo "old = $OLD_PASSWORD"
 
 mysql --user=root \
-      --password="$OLD_PASSWORD" \
+      --password=$OLD_PASSWORD \
       --skip-column-names \
       --batch \
       --connect-expired-password \
