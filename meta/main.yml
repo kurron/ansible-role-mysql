@@ -12,7 +12,7 @@ galaxy_info:
   platforms:
   - name: RHEL
     versions:
-    - maipo
+    - 7
   - name: Fedora
     versions:
     - 24
