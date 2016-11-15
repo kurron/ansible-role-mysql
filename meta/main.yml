@@ -10,7 +10,7 @@ galaxy_info:
   github_branch: master
 
   platforms:
-  - name: RHEL
+  - name: RedHat
     versions:
     - 7
   - name: Fedora
