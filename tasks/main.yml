@@ -66,6 +66,7 @@
 
 - debug:
       msg: "Password = {{ password.stdout }}"
+  when: mysql_install
 
 - name: Start MySQL
   become: yes
