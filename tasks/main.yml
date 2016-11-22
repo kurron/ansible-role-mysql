@@ -58,6 +58,15 @@
       mode: 0555
   when: mysql_install and (ansible_distribution == "RedHat")
 
+- name: Start MySQL
+  become: yes
+  systemd:
+      name: mysqld
+      enabled: yes
+      daemon_reload: yes
+      state: restarted
+  when: mysql_install
+
 - name: Capture MySQL Root Password
   become: yes
   shell: /tmp/extract-password.sh
@@ -66,15 +75,6 @@
 
 - debug:
       msg: "Password = {{ password.stdout }}"
-  when: mysql_install
-
-- name: Start MySQL
-  become: yes
-  systemd:
-      name: mysqld
-      enabled: yes
-      daemon_reload: yes
-      state: restarted
   when: mysql_install
 
 # Note: We do not use mysql_user for this operation, as it doesn't always update

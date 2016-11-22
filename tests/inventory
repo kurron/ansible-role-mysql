@@ -1,1 +1,1 @@
-remote ansible_ssh_host=192.168.1.30 ansible_ssh_port=22
+remote ansible_ssh_host=54.245.4.116 ansible_ssh_port=22
