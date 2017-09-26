@@ -11,14 +11,14 @@
 - name: Download MySQL Repository Configuration
   become: no
   command: "curl --output {{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm http://repo.mysql.com//mysql57-community-release-el7-9.noarch.rpm"
-  when: mysql_install and (ansible_distribution == "RedHat")
+  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Install MySQL Repository
   become: yes
   yum:
       name: "{{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm"
       state: present
-  when: mysql_install and (ansible_distribution == "RedHat")
+  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Install MySQL And Companion Tools
   become: yes
@@ -29,7 +29,7 @@
       - mysql-community-server
       - mysql-community-client
       - MySQL-python
-  when: mysql_install and (ansible_distribution == "RedHat")
+  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Adjust MySQL Configuration File
   become: yes
@@ -40,7 +40,7 @@
       - "character-set-server=utf8"
       - "bind-address=*"
       - "lower_case_table_names=1"
-  when: mysql_install and (ansible_distribution == "RedHat")
+  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Copy Password Capture Script
   become: yes
@@ -48,7 +48,7 @@
       src: files/extract-password.sh
       dest: /tmp/extract-password.sh
       mode: 0555
-  when: mysql_install and (ansible_distribution == "RedHat")
+  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Copy Password Alter Script
   become: yes
@@ -56,7 +56,7 @@
       src: files/change-password.sh
       dest: /tmp/change-password.sh
       mode: 0555
-  when: mysql_install and (ansible_distribution == "RedHat")
+  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Start MySQL
   become: yes
@@ -71,7 +71,7 @@
   become: yes
   shell: /tmp/extract-password.sh
   register: password
-  when: mysql_install and (ansible_distribution == "RedHat")
+  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - debug:
       msg: "Password = {{ password.stdout }}"
