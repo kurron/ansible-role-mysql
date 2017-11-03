@@ -1,24 +1,35 @@
 ---
 # this fails with 104 errors for some reason.  can't follow redirects?
-- name: Download MySQL Repository Configuration
+- name: Download MySQL 5.7.16 RPM bundle (not available GA)
   become: no
   get_url:
-      url: "http://repo.mysql.com//mysql57-community-release-el7-9.noarch.rpm"
-      dest: "{{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm"
-  when: mysql_install and (ansible_distribution == "FALSE")
+      url: "https://downloads.mysql.com/archives/get/file/mysql-5.7.16-1.el7.x86_64.rpm-bundle.tar"
+      dest: "{{ansible_user_dir}}/{{base_download_directory}}/mysql-5.7.16-1.el7.x86_64.rpm-bundle.tar"
+  when: mysql_install and (ansible_distribution == "CentOS")
+
+- name: Untar RPM bundle
+  unarchive: 
+    src: {{ansible_user_dir}}/{{base_download_directory}}/mysql-5.7.16-1.el7.x86_64.rpm-bundle.tar
+    dest: {{ansible_user_dir}}/{{base_download_directory}}/
+    
+- name: Install MySQL RPMS
+  become: yes
+  yum:
+      name: "{{ansible_user_dir}}/{{base_download_directory}}/mysql-community-*"
+      state: present
 
 # download by hand because of the issue with get_url
 - name: Download MySQL Repository Configuration
   become: no
-  command: "curl --output ~/mysql-community-server-5.7.16-1.el7.x86_64.rpm https://downloads.mysql.com/archives/get/file/mysql-community-server-5.7.16-1.el7.x86_64.rpm"
-  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
+  command: "curl --output {{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm http://repo.mysql.com//mysql57-community-release-el7-9.noarch.rpm"
+  when: mysql_install and (ansible_distribution == "Redhat")
 
 - name: Install MySQL Repository
   become: yes
   yum:
-      name: "~/mysql-community-server-5.7.16-1.el7.x86_64.rpm"
+      name: "{{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm"
       state: present
-  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
+  when: mysql_install and (ansible_distribution == "Redhat")
 
 - name: Install MySQL And Companion Tools
   become: yes
