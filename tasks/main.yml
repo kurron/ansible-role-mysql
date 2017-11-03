@@ -10,13 +10,13 @@
 # download by hand because of the issue with get_url
 - name: Download MySQL Repository Configuration
   become: no
-  command: "curl --output {{ansible_user_dir}}/{{base_download_directory}}/mysql-community-server-5.7.16-1.el7.x86_64.rpm https://downloads.mysql.com/archives/get/file/mysql-community-server-5.7.16-1.el7.x86_64.rpm"
+  command: "curl --output ~/mysql-community-server-5.7.16-1.el7.x86_64.rpm https://downloads.mysql.com/archives/get/file/mysql-community-server-5.7.16-1.el7.x86_64.rpm"
   when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Install MySQL Repository
   become: yes
   yum:
-      name: "{{ansible_user_dir}}/{{base_download_directory}}/mysql-community-server-5.7.16-1.el7.x86_64.rpm"
+      name: "~/mysql-community-server-5.7.16-1.el7.x86_64.rpm"
       state: present
   when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
