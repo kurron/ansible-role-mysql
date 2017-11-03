@@ -45,7 +45,7 @@
       - mysql-community-server
       - mysql-community-client
       - MySQL-python
-  when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
+  when: mysql_install and (ansible_distribution == "Redhat")
 
 - name: Adjust MySQL Configuration File
   become: yes
