@@ -9,8 +9,8 @@
 
 - name: Untar RPM bundle
   unarchive: 
-    src: {{ansible_user_dir}}/{{base_download_directory}}/mysql-5.7.16-1.el7.x86_64.rpm-bundle.tar
-    dest: {{ansible_user_dir}}/{{base_download_directory}}/
+    src: "{{ansible_user_dir}}/{{base_download_directory}}/mysql-5.7.16-1.el7.x86_64.rpm-bundle.tar"
+    dest: "{{ansible_user_dir}}/{{base_download_directory}}/"
     
 - name: Install MySQL RPMS
   become: yes
