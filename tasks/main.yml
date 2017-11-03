@@ -17,6 +17,12 @@
   yum:
       name: mariadb-libs
       state: absent
+      
+- name: Install MySQL-python
+  become: yes
+  yum:
+      name: MySQL-python
+      state: latest
     
 - name: Install MySQL RPMS
   become: yes
