@@ -10,7 +10,7 @@
 # download by hand because of the issue with get_url
 - name: Download MySQL Repository Configuration
   become: no
-  command: "curl --output {{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-9.noarch.rpm http://repo.mysql.com//mysql57-community-release-el7-9.noarch.rpm"
+  command: "curl --output {{ansible_user_dir}}/{{base_download_directory}}/mysql57-community-release-el7-6.noarch.rpm https://downloads.mysql.com/archives/get/file/mysql-community-server-5.7.16-1.el7.x86_64.rpm"
   when: mysql_install and (ansible_distribution == "CentOS" or ansible_distribution == "Redhat")
 
 - name: Install MySQL Repository
