@@ -18,10 +18,10 @@
       name: "{{ansible_user_dir}}/{{base_download_directory}}/{{ item }}"
       state: present
   with_items:
-      - mysql-community-server-5.7.16-1.el7.x86_64.rpm
-      - mysql-community-client-5.7.16-1.el7.x86_64.rpm
       - mysql-community-common-5.7.16-1.el7.x86_64.rpm
       - mysql-community-libs-5.7.16-1.el7.x86_64.rpm
+      - mysql-community-client-5.7.16-1.el7.x86_64.rpm
+      - mysql-community-server-5.7.16-1.el7.x86_64.rpm
 
 # download by hand because of the issue with get_url
 - name: Download MySQL Repository Configuration
